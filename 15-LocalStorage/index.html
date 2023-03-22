@@ -24,6 +24,9 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <button id="uncheck">Uncheck All</button>
+    <button id="check">Check All</button>
+    <button id="delete">Delete All</button>
   </div>
 
 <script>
@@ -32,6 +35,9 @@
   const items = JSON.parse(localStorage.getItem('items')) || [];
   // if we have items in our local storage set items to that, otherwise
   // make an empty array
+  const uncheck = document.querySelector('#uncheck');
+  const check = document.querySelector('#check');
+  const deleteButton = document.querySelector('#delete');
 
   function addItem(e) {
     e.preventDefault(); // the page will reload on submit, and we want to prevent that
@@ -46,7 +52,6 @@
     populateList(items, itemsList);
     //local storage only stores strings, so no objects etc
     localStorage.setItem('items', JSON.stringify(items));
-    console.table(items);
     this.reset(); // form elements have a reset on them, so it can clear out the
                   // item we entered after we've submitted it.
   }
@@ -61,7 +66,6 @@
         </li>
       `;
     }).join('');
-    console.log(itemsList);
   }
 
   function toggleDone(e) {
@@ -74,8 +78,35 @@
     populateList(items, itemsList);
   }
 
+  function uncheckAll() {
+    items.forEach((item) => {
+      item.done = false;
+      console.log(item);
+    });
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  function checkAll() {
+    items.forEach((item) => {
+      item.done = true;
+    });
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  function deleteAll() {
+    items.length = 0;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
   addItems.addEventListener('submit', addItem);
   itemsList.addEventListener('click', toggleDone);
+  uncheck.addEventListener('click', uncheckAll);
+  check.addEventListener('click', checkAll);
+  deleteButton.addEventListener('click', deleteAll);
+
   populateList(items, itemsList);
 
 
