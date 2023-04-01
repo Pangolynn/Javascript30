@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+  div {
+    width: 100%;
+    padding: 100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background: mistyrose;
+  }
+
+  .three {
+    background: coral;
+  }
+</style>
+
+<button></button>
+<script>
+
+const divs = document.querySelectorAll('div');
+const button = document.querySelector('button');
+
+// bubbling - even if you click the innermost div, you technically clicked all the
+// encompassing elements! The clicks will be 'bubbled' all the way up
+// But it starts as a 'capture' that goes through each event top > down
+function logText(e) {
+  console.log(this.classList.value);
+  e.stopPropagation(); // this will stop bubbling the event up.
+
+}
+
+// the option capture: true means we will run on the 'capture' down instead
+// of on the 'bubble' back up
+divs.forEach(div => div.addEventListener('click', logText, {
+  capture: false,
+  once: true // once will listen for a click once, then unbind its eventListener
+}));
+
+button.addEventListener('click', () => {
+  console.log('Click');
+}, {
+  once: true
+});
+
+</script>
+</body>
+</html>
